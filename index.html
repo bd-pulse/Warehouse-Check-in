@@ -379,13 +379,13 @@ async function submitScan() {
 }
 
 async function appendRowToExcel(rowValues) {
-  const encodedPath = CONFIG.WORKBOOK_PATH;
-  const sheetName   = encodeURIComponent(CONFIG.SHEET_NAME);
+  const sheetName = CONFIG.SHEET_NAME;
   const token = await graphClient.config.authProvider.getAccessToken();
+  const baseUrl = `https://graph.microsoft.com/v1.0/me/drive/root:${CONFIG.WORKBOOK_PATH}:/workbook/worksheets('${sheetName}')`;
 
   // Get used range to find next empty row
   const rangeRes = await fetch(
-    `https://graph.microsoft.com/v1.0/me/drive/root:${encodedPath}:/workbook/worksheets('${sheetName}')/usedRange`,
+    `${baseUrl}/usedRange`
     { headers: { Authorization: `Bearer ${token}` } }
   );
   const rangeData = await rangeRes.json();
@@ -394,7 +394,7 @@ async function appendRowToExcel(rowValues) {
   const address   = `A${nextRow}:${colEnd}${nextRow}`;
 
   const patchRes = await fetch(
-    `https://graph.microsoft.com/v1.0/me/drive/root:${encodedPath}:/workbook/worksheets('${sheetName}')/range(address='${address}')`,
+    `${baseUrl}/range(address='${address}')`,
     {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
