@@ -556,7 +556,7 @@ function showToast(type, title, sub) {
 // Load MSAL then init
 (function loadMSAL() {
   const s = document.createElement("script");
-  s.src = "https://cdnjs.cloudflare.com/ajax/libs/microsoft-authentication-library/3.11.0/msal-browser.min.js";
+  s.src = "https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js";
   s.onload = initMSAL;
   s.onerror = () => {
     document.getElementById("configWarning").style.display = "block";
