@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Warehouse Check-In</title>
+  <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.11.0/lib/msal-browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-graph-client/3.0.7/graph-js-sdk.js"></script>
 <style>
   :root {
@@ -554,14 +555,7 @@ function showToast(type, title, sub) {
 
 // ── MSAL lib (loaded from CDN below) ─────────────────
 // Load MSAL then init
-(function loadMSAL() {
-  const s = document.createElement("script");
-  s.src = "https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.11.0/lib/msal-browser.min.js";
-  s.onload = initMSAL;
-  s.onerror = () => {
-    document.getElementById("configWarning").style.display = "block";
-    document.getElementById("configWarning").innerHTML =
-      "<h3>⚠️ CDN Load Failed</h3>Make sure you're connected to the internet and reload the page.";
+initMSAL();
   };
   document.head.appendChild(s);
 })();
