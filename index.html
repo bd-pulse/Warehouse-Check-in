@@ -7,150 +7,41 @@
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.11.0/lib/msal-browser.min.js"></script>
 <style>
   :root {
-    --navy: #1F3864;
-    --blue: #2E75B6;
-    --light-blue: #BDD7EE;
-    --green: #1e7e34;
-    --green-light: #d4edda;
-    --red: #c0392b;
-    --red-light: #fdecea;
-    --bg: #f0f4f8;
-    --card: #ffffff;
-    --text: #1a202c;
-    --muted: #718096;
-    --border: #e2e8f0;
-    --radius: 16px;
+    --navy: #1F3864; --blue: #2E75B6; --green: #1e7e34;
+    --green-light: #d4edda; --red: #c0392b; --red-light: #fdecea;
+    --bg: #f0f4f8; --card: #ffffff; --text: #1a202c;
+    --muted: #718096; --border: #e2e8f0; --radius: 16px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 24px 16px 48px;
-  }
-  .app-header {
-    width: 100%; max-width: 460px;
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 20px;
-  }
-  .app-logo {
-    width: 44px; height: 44px;
-    background: var(--navy);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .app-logo svg { width: 26px; height: 26px; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px 48px; }
+  .app-header { width: 100%; max-width: 460px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .app-logo { width: 44px; height: 44px; background: var(--navy); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
   .app-title { font-size: 20px; font-weight: 700; color: var(--navy); }
-  .app-sub   { font-size: 12px; color: var(--muted); margin-top: 1px; }
-  .card {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    padding: 28px 24px;
-    width: 100%; max-width: 460px;
-    margin-bottom: 16px;
-  }
-  .location-badge {
-    background: linear-gradient(135deg, var(--navy), var(--blue));
-    color: white;
-    border-radius: 12px;
-    padding: 16px 20px;
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 24px;
-  }
-  .location-badge .icon {
-    width: 42px; height: 42px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .location-badge .loc-name { font-size: 17px; font-weight: 700; }
-  .location-badge .loc-id   { font-size: 12px; opacity: 0.75; margin-top: 2px; }
-  label {
-    display: block; font-size: 13px; font-weight: 600;
-    color: var(--navy); margin-bottom: 7px; letter-spacing: 0.3px;
-  }
-  input[type="text"] {
-    width: 100%; padding: 13px 16px;
-    border: 2px solid var(--border); border-radius: 10px;
-    font-size: 16px; color: var(--text);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none; background: #fafbfc;
-  }
-  input[type="text"]:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(46,117,182,0.15);
-    background: white;
-  }
+  .app-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 28px 24px; width: 100%; max-width: 460px; margin-bottom: 16px; }
+  .location-badge { background: linear-gradient(135deg, var(--navy), var(--blue)); color: white; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .loc-name { font-size: 17px; font-weight: 700; }
+  .loc-id { font-size: 12px; opacity: 0.75; margin-top: 2px; }
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 7px; }
+  input[type="text"] { width: 100%; padding: 13px 16px; border: 2px solid var(--border); border-radius: 10px; font-size: 16px; color: var(--text); outline: none; background: #fafbfc; }
+  input[type="text"]:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(46,117,182,0.15); background: white; }
   .field { margin-bottom: 20px; }
-  .timestamp-display {
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: 10px; padding: 12px 16px;
-    font-size: 15px; color: var(--text);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .notes-input {
-    resize: none; min-height: 70px; font-family: inherit;
-    width: 100%; padding: 12px 16px;
-    border: 2px solid var(--border); border-radius: 10px;
-    font-size: 15px; color: var(--text);
-    outline: none; background: #fafbfc;
-    transition: border-color 0.2s;
-  }
-  .notes-input:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(46,117,182,0.15);
-    background: white;
-  }
-  .btn-submit {
-    width: 100%; padding: 16px;
-    background: linear-gradient(135deg, var(--navy), var(--blue));
-    color: white; border: none; border-radius: 12px;
-    font-size: 17px; font-weight: 700; cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-  }
-  .btn-submit:hover  { opacity: 0.92; }
-  .btn-submit:active { transform: scale(0.98); }
-  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-  .toast {
-    display: none; border-radius: 12px; padding: 16px 20px;
-    font-size: 15px; font-weight: 600;
-    align-items: center; gap: 12px;
-    animation: slideUp 0.3s ease;
-    width: 100%; max-width: 460px; margin-bottom: 12px;
-  }
+  .timestamp-display { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  textarea { resize: none; min-height: 70px; font-family: inherit; width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 10px; font-size: 15px; color: var(--text); outline: none; background: #fafbfc; }
+  textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(46,117,182,0.15); background: white; }
+  .btn { width: 100%; padding: 16px; color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+  .btn-primary { background: linear-gradient(135deg, var(--navy), var(--blue)); }
+  .btn-ms { background: #0078d4; }
+  .btn-debug { background: #888; font-size: 14px; padding: 12px; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .toast { display: none; border-radius: 12px; padding: 16px 20px; font-size: 15px; font-weight: 600; align-items: center; gap: 12px; width: 100%; max-width: 460px; margin-bottom: 12px; }
   .toast.success { display: flex; background: var(--green-light); color: var(--green); border: 1.5px solid #a8d5b5; }
-  .toast.error   { display: flex; background: var(--red-light);   color: var(--red);   border: 1.5px solid #f5b7b1; }
-  .toast .toast-icon  { font-size: 22px; flex-shrink: 0; }
-  .toast .toast-body  { flex: 1; }
-  .toast .toast-title { font-size: 15px; font-weight: 700; }
-  .toast .toast-sub   { font-size: 13px; font-weight: 400; margin-top: 2px; opacity: 0.85; }
-  .btn-auth {
-    width: 100%; padding: 14px;
-    background: #0078d4; color: white; border: none;
-    border-radius: 12px; font-size: 15px; font-weight: 600;
-    cursor: pointer; margin-bottom: 10px;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    transition: opacity 0.2s;
-  }
-  .btn-auth:hover { opacity: 0.9; }
-  .auth-note { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; }
-  .spinner {
-    width: 20px; height: 20px;
-    border: 3px solid rgba(255,255,255,0.3);
-    border-top-color: white; border-radius: 50%;
-    animation: spin 0.7s linear infinite; flex-shrink: 0;
-  }
-  .recent-scans { font-size: 12px; color: var(--muted); text-align: center; margin-top: 4px; }
-  #authSection, #formSection { width: 100%; max-width: 460px; }
-  @keyframes slideUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .toast.error { display: flex; background: var(--red-light); color: var(--red); border: 1.5px solid #f5b7b1; }
+  .toast-title { font-size: 15px; font-weight: 700; }
+  .toast-sub { font-size: 13px; font-weight: 400; margin-top: 2px; opacity: 0.85; }
+  .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  .hint { font-size: 12px; color: var(--muted); text-align: center; margin-top: 4px; }
+  #authSection, #formSection { width: 100%; max-width: 460px; display: none; }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
@@ -158,7 +49,7 @@
 
 <div class="app-header">
   <div class="app-logo">
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
       <rect x="3" y="3" width="7" height="7" rx="1" fill="white"/>
       <rect x="14" y="3" width="7" height="7" rx="1" fill="white"/>
       <rect x="3" y="14" width="7" height="7" rx="1" fill="white"/>
@@ -172,253 +63,207 @@
 </div>
 
 <div class="toast" id="toast">
-  <div class="toast-icon" id="toastIcon"></div>
-  <div class="toast-body">
-    <div class="toast-title" id="toastTitle"></div>
-    <div class="toast-sub"  id="toastSub"></div>
-  </div>
+  <div style="font-size:22px" id="toastIcon"></div>
+  <div><div class="toast-title" id="toastTitle"></div><div class="toast-sub" id="toastSub"></div></div>
 </div>
 
-<div id="authSection" style="display:none">
-  <div class="card">
-    <div style="text-align:center; margin-bottom:20px;">
-      <div style="font-size:40px; margin-bottom:8px;">🔐</div>
-      <div style="font-size:17px; font-weight:700; color:var(--navy); margin-bottom:6px;">Sign in with Microsoft</div>
-      <div style="font-size:13px; color:var(--muted); line-height:1.6;">
-        Sign in once to allow the app to write scan records to your OneDrive Excel file.
-      </div>
-    </div>
-    <button class="btn-auth" id="btnSignIn" onclick="signIn()">
-      <svg width="20" height="20" viewBox="0 0 23 23" fill="none">
-        <path fill="#f3f3f3" d="M0 0h23v23H0z"/>
-        <path fill="#f35325" d="M1 1h10v10H1z"/>
-        <path fill="#81bc06" d="M12 1h10v10H12z"/>
-        <path fill="#05a6f0" d="M1 12h10v10H1z"/>
-        <path fill="#ffba08" d="M12 12h10v10H12z"/>
-      </svg>
+<div id="authSection">
+  <div class="card" style="text-align:center">
+    <div style="font-size:40px;margin-bottom:12px">🔐</div>
+    <div style="font-size:17px;font-weight:700;color:var(--navy);margin-bottom:8px">Sign in with Microsoft</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6">Sign in once to allow the app to write scan records to your OneDrive Excel file.</div>
+    <button class="btn btn-ms" onclick="signIn()">
+      <svg width="20" height="20" viewBox="0 0 23 23" fill="none"><path fill="#f3f3f3" d="M0 0h23v23H0z"/><path fill="#f35325" d="M1 1h10v10H1z"/><path fill="#81bc06" d="M12 1h10v10H12z"/><path fill="#05a6f0" d="M1 12h10v10H1z"/><path fill="#ffba08" d="M12 12h10v10H12z"/></svg>
       Sign in with Microsoft
     </button>
-    <div class="auth-note">Your credentials are never stored by this app.<br>Only scan log data is written to your Excel file.</div>
+    <div class="hint">Your credentials are never stored by this app.</div>
   </div>
 </div>
 
-<div id="formSection" style="display:none">
+<div id="formSection">
   <div class="card">
     <div class="location-badge">
-      <div class="icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" fill="white"/>
-        </svg>
+      <div style="width:42px;height:42px;background:rgba(255,255,255,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" fill="white"/></svg>
       </div>
       <div>
         <div class="loc-name" id="locationName">Loading…</div>
-        <div class="loc-id"   id="locationId">—</div>
+        <div class="loc-id" id="locationId">—</div>
       </div>
     </div>
 
     <div class="field">
-      <label for="workerName">👤 Your Name</label>
-      <input type="text" id="workerName" placeholder="Enter your full name" autocomplete="off" spellcheck="false">
+      <label>👤 Your Name</label>
+      <input type="text" id="workerName" placeholder="Enter your full name" autocomplete="off">
     </div>
-
     <div class="field">
       <label>🕐 Scan Time</label>
-      <div class="timestamp-display">
-        <span style="font-size:18px">🕐</span>
-        <span id="clockDisplay">—</span>
-      </div>
+      <div class="timestamp-display">🕐 <span id="clockDisplay">—</span></div>
     </div>
-
     <div class="field">
-      <label for="notes">📝 Notes <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-      <textarea class="notes-input" id="notes" placeholder="Any issues or observations…"></textarea>
+      <label>📝 Notes <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <textarea id="notes" placeholder="Any issues or observations…"></textarea>
     </div>
 
-    <button class="btn-submit" style="background:gray;margin-bottom:10px" onclick="debugPath()">Debug Path</button>
-    <button class="btn-submit" id="btnSubmit" onclick="submitScan()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      Log Inspection
-    </button>
-    <div class="recent-scans" id="recentNote"></div>
+    <button class="btn btn-primary" id="btnSubmit" onclick="submitScan()">✅ Log Inspection</button>
+    <button class="btn btn-debug" onclick="debugDrive()">🔍 Debug: Show OneDrive Root</button>
+    <div class="hint" id="hint"></div>
   </div>
 </div>
 
 <script>
-// ── Configuration ────────────────────────────────────
-const CONFIG = {
-  CLIENT_ID:     "9e2c6712-972d-4918-864b-dfd9ed79c74c",
-  TENANT_ID:     "common",
-  WORKBOOK_PATH: "/Warehouse_Inspection_Log.xlsx",
-  SHEET_NAME:    "Scan Log",
-};
-// ────────────────────────────────────────────────────
+const CLIENT_ID     = "9e2c6712-972d-4918-864b-dfd9ed79c74c";
+const SHEET_NAME    = "Scan Log";
+const SCOPES        = ["Files.ReadWrite", "User.Read"];
 
-const SCOPES = ["Files.ReadWrite", "User.Read"];
-let msalInstance  = null;
-let graphClient   = null;
-let currentAccount = null;
+let msalInstance = null;
+let accessToken  = null;
 
-function getLocationFromURL() {
-  const p = new URLSearchParams(window.location.search);
-  return {
-    id:   p.get("loc")  || "UNKNOWN",
-    name: p.get("name") || formatLocName(p.get("loc") || "Unknown Location"),
-  };
-}
-
-function formatLocName(id) {
-  return id.replace(/([A-Z])(\d)/g,"$1 $2").replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-}
-
-function updateClock() {
-  document.getElementById("clockDisplay").textContent =
-    new Date().toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"}) + "  " +
-    new Date().toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
-}
-
-async function initMSAL() {
-  const msalConfig = {
+// ── Init ─────────────────────────────────────────────
+async function init() {
+  msalInstance = new msal.PublicClientApplication({
     auth: {
-      clientId: CONFIG.CLIENT_ID,
-      authority: `https://login.microsoftonline.com/${CONFIG.TENANT_ID}`,
+      clientId: CLIENT_ID,
+      authority: "https://login.microsoftonline.com/common",
       redirectUri: window.location.origin + window.location.pathname,
     },
-    cache: { cacheLocation: "localStorage", storeAuthStateInCookie: false },
-  };
+    cache: { cacheLocation: "localStorage" }
+  });
+  await msalInstance.initialize();
 
   try {
-    msalInstance = new msal.PublicClientApplication(msalConfig);
-    await msalInstance.initialize();
-
     const result = await msalInstance.handleRedirectPromise();
-    if (result) currentAccount = result.account;
+    if (result) { await setupWithAccount(result.account); return; }
+  } catch(e) { console.error(e); }
 
-    const accounts = msalInstance.getAllAccounts();
-    if (accounts.length > 0) {
-      currentAccount = accounts[0];
-      setupGraphClient();
-      showForm();
-    } else {
-      document.getElementById("authSection").style.display = "block";
-    }
-  } catch(e) {
-    showToast("error", "Initialization failed", e.message);
+  const accounts = msalInstance.getAllAccounts();
+  if (accounts.length > 0) {
+    await setupWithAccount(accounts[0]);
+  } else {
     document.getElementById("authSection").style.display = "block";
   }
 }
 
-async function signIn() {
+async function setupWithAccount(account) {
   try {
-    await msalInstance.loginRedirect({ scopes: SCOPES });
-  } catch(e) {
-    showToast("error", "Sign-in failed", e.message);
+    const result = await msalInstance.acquireTokenSilent({ scopes: SCOPES, account });
+    accessToken = result.accessToken;
+  } catch {
+    const result = await msalInstance.acquireTokenPopup({ scopes: SCOPES });
+    accessToken = result.accessToken;
   }
+  document.getElementById("headerSub").textContent = "Signed in as " + (account.name || account.username);
+  showForm();
 }
 
-function setupGraphClient() {
-  const authProvider = {
-    getAccessToken: async () => {
-      const req = { scopes: SCOPES, account: currentAccount };
-      try {
-        const r = await msalInstance.acquireTokenSilent(req);
-        return r.accessToken;
-      } catch {
-        const r = await msalInstance.acquireTokenPopup(req);
-        return r.accessToken;
-      }
-    }
-  };
-  graphClient = MicrosoftGraph.Client.initWithMiddleware({ authProvider });
-  document.getElementById("headerSub").textContent = "Signed in as " + (currentAccount.name || currentAccount.username);
+function signIn() {
+  msalInstance.loginRedirect({ scopes: SCOPES });
 }
 
+// ── Form ─────────────────────────────────────────────
 function showForm() {
-  const loc = getLocationFromURL();
-  document.getElementById("locationName").textContent = loc.name;
-  document.getElementById("locationId").textContent   = "ID: " + loc.id;
+  const p    = new URLSearchParams(window.location.search);
+  const locId   = p.get("loc")  || "UNKNOWN";
+  const locName = p.get("name") ? decodeURIComponent(p.get("name")) : locId;
+  document.getElementById("locationName").textContent = locName;
+  document.getElementById("locationId").textContent   = "ID: " + locId;
   document.getElementById("authSection").style.display = "none";
   document.getElementById("formSection").style.display = "block";
-  const saved = localStorage.getItem("wh_worker_name");
-  if (saved) {
-    document.getElementById("workerName").value = saved;
-    document.getElementById("recentNote").textContent = "Name saved from your last scan ✓";
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
+  const saved = localStorage.getItem("wh_name");
+  if (saved) { document.getElementById("workerName").value = saved; document.getElementById("hint").textContent = "Name saved from your last scan ✓"; }
+  setInterval(() => {
+    document.getElementById("clockDisplay").textContent =
+      new Date().toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"}) + "  " +
+      new Date().toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  }, 1000);
 }
 
+// ── Debug ─────────────────────────────────────────────
+async function debugDrive() {
+  try {
+    const res  = await fetch("https://graph.microsoft.com/v1.0/me/drive/root/children?$select=name,id", { headers: { Authorization: "Bearer " + accessToken } });
+    const data = await res.json();
+    if (data.error) { alert("Error: " + data.error.message); return; }
+    const names = data.value.map(f => f.name).join("\n");
+    alert("OneDrive root contains:\n\n" + names);
+  } catch(e) { alert("Debug failed: " + e.message); }
+}
+
+// ── Submit ────────────────────────────────────────────
 async function submitScan() {
   const name = document.getElementById("workerName").value.trim();
-  if (!name) {
-    showToast("error","Name required","Please enter your name before submitting.");
-    document.getElementById("workerName").focus();
-    return;
-  }
+  if (!name) { showToast("error","Name required","Please enter your name."); return; }
+
   const btn = document.getElementById("btnSubmit");
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Saving to OneDrive…';
+  btn.innerHTML = '<div class="spinner"></div> Saving…';
+
   try {
-    const loc  = getLocationFromURL();
-    const now  = new Date();
-    const timestamp = now.toISOString().replace("T"," ").substring(0,19);
-    const dateStr   = now.toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"numeric"});
-    const timeStr   = now.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
-    const notes     = document.getElementById("notes").value.trim();
-    async function debugPath() {
-  const token = await graphClient.config.authProvider.getAccessToken();
-  const res = await fetch(
-    "https://graph.microsoft.com/v1.0/me/drive/root/children",
-    { headers: { Authorization: `Bearer ${token}` } }
+    const p       = new URLSearchParams(window.location.search);
+    const locId   = p.get("loc")  || "UNKNOWN";
+    const locName = p.get("name") ? decodeURIComponent(p.get("name")) : locId;
+    const now     = new Date();
+    const ts      = now.toISOString().replace("T"," ").substring(0,19);
+    const date    = now.toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"numeric"});
+    const time    = now.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+    const notes   = document.getElementById("notes").value.trim();
+
+    // Get file ID first using search
+    const fileId = await getFileId("Warehouse_Inspection_Log.xlsx");
+    await appendRow(fileId, [ts, date, time, name, locName, locId, notes]);
+
+    localStorage.setItem("wh_name", name);
+    document.getElementById("notes").value = "";
+    document.getElementById("hint").textContent = "Name saved for next scan ✓";
+    showToast("success","Inspection logged!", locName + " · " + time);
+  } catch(e) {
+    console.error(e);
+    showToast("error","Failed to save", e.message);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = "✅ Log Inspection";
+}
+
+// ── Graph API ─────────────────────────────────────────
+async function getFileId(filename) {
+  const res  = await fetch(
+    `https://graph.microsoft.com/v1.0/me/drive/root/search(q='${encodeURIComponent(filename)}')`,
+    { headers: { Authorization: "Bearer " + accessToken } }
   );
   const data = await res.json();
-  const names = data.value.map(f => f.name).join("\n");
-  alert("OneDrive root contains:\n\n" + names);
-}
-    await appendRowToExcel([timestamp, dateStr, timeStr, name, loc.name, loc.id, notes]);
-    localStorage.setItem("wh_worker_name", name);
-    document.getElementById("recentNote").textContent = "Name saved for next scan ✓";
-    document.getElementById("notes").value = "";
-    showToast("success","Inspection logged!",`${loc.name} · ${timeStr}`);
-  } catch(err) {
-    console.error(err);
-    showToast("error","Failed to save", err.message || "Check your connection and try again.");
-  }
-  btn.disabled = false;
-  btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="white" stroke-width="2" stroke-linecap="round"/></svg> Log Inspection`;
+  if (data.error) throw new Error(data.error.message);
+  const file = data.value && data.value.find(f => f.name === filename);
+  if (!file) throw new Error("Could not find " + filename + " in OneDrive. Make sure the file exists and is not in a Teams/SharePoint folder.");
+  return file.id;
 }
 
-async function appendRowToExcel(rowValues) {
-  const sheetName = CONFIG.SHEET_NAME;
-  const token = await graphClient.config.authProvider.getAccessToken();
-  const baseUrl = `https://graph.microsoft.com/v1.0/me/drive/root:${CONFIG.WORKBOOK_PATH}:/workbook/worksheets('${sheetName}')`;
-
-  // Get used range to find next empty row
-  const rangeRes = await fetch(
-    `${baseUrl}/usedRange`
-    { headers: { Authorization: `Bearer ${token}` } }
+async function appendRow(fileId, rowValues) {
+  // Get used range
+  const r1  = await fetch(
+    `https://graph.microsoft.com/v1.0/me/drive/items/${fileId}/workbook/worksheets('${encodeURIComponent(SHEET_NAME)}')/usedRange`,
+    { headers: { Authorization: "Bearer " + accessToken } }
   );
-  const rangeData = await rangeRes.json();
-  const nextRow   = (rangeData.rowCount || 1) + 1;
-  const colEnd    = String.fromCharCode(64 + rowValues.length);
-  const address   = `A${nextRow}:${colEnd}${nextRow}`;
+  const d1  = await r1.json();
+  if (d1.error) throw new Error(d1.error.message);
+  const nextRow = (d1.rowCount || 1) + 1;
+  const colEnd  = String.fromCharCode(64 + rowValues.length);
+  const address = `A${nextRow}:${colEnd}${nextRow}`;
 
-  const patchRes = await fetch(
-    `${baseUrl}/range(address='${address}')`,
+  const r2 = await fetch(
+    `https://graph.microsoft.com/v1.0/me/drive/items/${fileId}/workbook/worksheets('${encodeURIComponent(SHEET_NAME)}')/range(address='${address}')`,
     {
       method: "PATCH",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" },
       body: JSON.stringify({ values: [rowValues] })
     }
   );
-  if (!patchRes.ok) {
-    const err = await patchRes.json();
-    throw new Error(err.error?.message || "Failed to write to Excel");
-  }
+  const d2 = await r2.json();
+  if (d2.error) throw new Error(d2.error.message);
 }
 
-let toastTimer = null;
+// ── Toast ─────────────────────────────────────────────
+let toastTimer;
 function showToast(type, title, sub) {
   const t = document.getElementById("toast");
   t.className = "toast " + type;
@@ -426,15 +271,11 @@ function showToast(type, title, sub) {
   document.getElementById("toastTitle").textContent = title;
   document.getElementById("toastSub").textContent   = sub;
   if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { t.className = "toast"; }, 5000);
+  toastTimer = setTimeout(() => t.className = "toast", 5000);
 }
 
-// Also load Graph client SDK
-const graphScript = document.createElement("script");
-graphScript.src = "https://cdn.jsdelivr.net/npm/@microsoft/microsoft-graph-client@3.0.7/lib/graph-js-sdk.js";
-graphScript.onload = initMSAL;
-graphScript.onerror = () => showToast("error", "Network error", "Could not load required libraries. Check your internet connection.");
-document.head.appendChild(graphScript);
+// ── Start ─────────────────────────────────────────────
+window.addEventListener("load", init);
 </script>
 </body>
 </html>
