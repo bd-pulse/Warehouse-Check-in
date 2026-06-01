@@ -379,7 +379,7 @@ async function submitScan() {
 }
 
 async function appendRowToExcel(rowValues) {
-  const encodedPath = encodeURIComponent(CONFIG.WORKBOOK_PATH);
+  const encodedPath = CONFIG.WORKBOOK_PATH;
   const sheetName   = encodeURIComponent(CONFIG.SHEET_NAME);
   const token = await graphClient.config.authProvider.getAccessToken();
 
