@@ -234,6 +234,7 @@
       <textarea class="notes-input" id="notes" placeholder="Any issues or observations…"></textarea>
     </div>
 
+    <button class="btn-submit" style="background:gray;margin-bottom:10px" onclick="debugPath()">Debug Path</button>
     <button class="btn-submit" id="btnSubmit" onclick="submitScan()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -365,6 +366,16 @@ async function submitScan() {
     const dateStr   = now.toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"numeric"});
     const timeStr   = now.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
     const notes     = document.getElementById("notes").value.trim();
+    async function debugPath() {
+  const token = await graphClient.config.authProvider.getAccessToken();
+  const res = await fetch(
+    "https://graph.microsoft.com/v1.0/me/drive/root/children",
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  const data = await res.json();
+  const names = data.value.map(f => f.name).join("\n");
+  alert("OneDrive root contains:\n\n" + names);
+}
     await appendRowToExcel([timestamp, dateStr, timeStr, name, loc.name, loc.id, notes]);
     localStorage.setItem("wh_worker_name", name);
     document.getElementById("recentNote").textContent = "Name saved for next scan ✓";
